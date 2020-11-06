@@ -19,10 +19,14 @@ def read_space_objects_data_from_file(input_filename):
             if len(line.strip()) == 0 or line[0] == '#':
                 continue  # пустые строки и строки-комментарии пропускаем
             object_type = line.split()[0].lower()
-            if object_type == "star":  # FIXME: do the same for planet
+            if object_type == "star": 
                 star = Star()
                 parse_star_parameters(line, star)
                 objects.append(star)
+            if object_type == "planet":
+                planet = Planet()
+                parse_star_parameters(line, star)
+                objects.append(planet)
             else:
                 print("Unknown space object")
 
@@ -43,8 +47,8 @@ def parse_star_parameters(line, star):
     **line** — строка с описание звезды.
     **star** — объект звезды.
     """
-
-    pass  # FIXME: not done yet
+    star.R, star.color, star.m, star.x, star.y, star.Vx, star.Vy = *line.split(" ")[1:]
+    
 
 def parse_planet_parameters(line, planet):
     """Считывает данные о планете из строки.
@@ -61,8 +65,9 @@ def parse_planet_parameters(line, planet):
     **line** — строка с описание планеты.
     **planet** — объект планеты.
     """
-    pass  # FIXME: not done yet...
-
+    planet.R, planet.color, planet.m, planet.x, planet.y, planet.Vx, planet.Vy = *line.split(" ")[1:]
+    
+    
 
 def write_space_objects_data_to_file(output_filename, space_objects):
     """Сохраняет данные о космических объектах в файл.
@@ -77,10 +82,8 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     """
     with open(output_filename, 'w') as out_file:
         for obj in space_objects:
-            print(out_file, "%s %d %s %f" % ('1', 2, '3', 4.5))
-            # FIXME: should store real values
-
-# FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
+            print(out_file, "%s %d %s %f %d %d %d %d" % (obj.type, obj.R, obj.color, obj.m, obj.x, obj.y, obj.Vx, obj.Vy))
+           
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
