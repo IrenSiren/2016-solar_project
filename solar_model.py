@@ -5,6 +5,13 @@ gravitational_constant = 6.67408E-11
 """Гравитационная постоянная Ньютона G"""
 
 
+def sign(x):
+    if x >= 0:
+        return 1
+    else:
+        return -1
+
+
 def calculate_force(body, space_objects):
     """Вычисляет силу, действующую на тело.
 
@@ -19,18 +26,9 @@ def calculate_force(body, space_objects):
         if body == obj:
             continue  # тело не действует гравитационной силой на само себя!
         else:
-          sing_x = 0
-          if (body.x - obj.x) >= 0:
-            sign_x = -1
-          else:
-            sign_x = 1
-          if (body.y - obj.y) >= 0:
-            sign_y = -1
-          else:
-            sign_y = 1
-        r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
-        body.Fx += sing_x * body.m * obj.m * gravitational_constant / r ** 2 
-        body.Fy += sing_y * body.m * obj.m * gravitational_constant / r ** 2  
+            r = ((body.x - obj.x) ** 2 + (body.y - obj.y) ** 2) ** 0.5
+            body.Fx += sign(obj.x - body.x) * body.m * obj.m * gravitational_constant / r ** 2
+            body.Fy += sign(obj.y - body.y) * body.m * obj.m * gravitational_constant / r ** 2
 
 
 def move_space_object(body, dt):
@@ -43,13 +41,13 @@ def move_space_object(body, dt):
 
     ax = body.Fx / body.m
     ay = body.Fy / body.m
-    
-    body.x += int(body.Vx * dt + ax * 0.5 * dt ** 2)
-    body.Vx += ax * dt
-    
-    body.y += int(body.Vy * dt + ay * 0.5 * dt ** 2)
-    body.Vy += ay * dt
 
+    body.x += body.Vx * dt + ax * 0.5 * dt ** 2
+    body.Vx += ax * dt
+
+    body.y += body.Vy * dt + ay * 0.5 * dt ** 2
+    body.Vy += ay * dt
+    print(body.x, body.y, body.Vx, body.Vy, ax, ay)
 
 def recalculate_space_objects_positions(space_objects, dt):
     """Пересчитывает координаты объектов.
